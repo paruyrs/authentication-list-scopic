@@ -1,0 +1,19 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="edit_text_stroke_border_size">1dp</dimen>
+    <dimen name="edit_text_error_message_font_size">12sp</dimen>
+    <dimen name="input_text_size">12sp</dimen>
+    <dimen name="input_text_top_padding">12dp</dimen>
+    <dimen name="input_text_start_end_padding">16dp</dimen>
+    <dimen name="input_text_bottom_padding">16dp</dimen>
+    <dimen name="footer_margin">50dp</dimen>
+    <dimen name="title_text_size">32sp</dimen>
+    <dimen name="margin_32">32dp</dimen>
+    <dimen name="margin_64">64dp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="size_42dp">42dp</dimen>
+
+</resources>

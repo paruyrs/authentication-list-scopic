@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "83439625287",
+    "project_id": "scopic-task-82561",
+    "storage_bucket": "scopic-task-82561.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83439625287:android:b6eb14180e4d53f2d3fd62",
+        "android_client_info": {
+          "package_name": "com.paruyr.scopictask"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkYhp5bVA-GOnZ1jCqRw_bT-_EyL2CjPE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

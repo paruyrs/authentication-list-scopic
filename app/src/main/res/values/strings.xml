@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Scopic</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="welcome">"Welcome"</string>
+    <string name="invalid_email">Not a valid email</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="sign_in_failed">"Sign in failed"</string>
+    <string name="sign_up_failed">"Sign up failed"</string>
+    <string name="sign_in_title">Sign in</string>
+    <string name="auth_email">Email</string>
+    <string name="auth_password">Password</string>
+    <string name="sign_up_title">Sign Up</string>
+    <string name="have_account">Have an Account?</string>
+    <string name="welcome_text">Hi there! Nice to see you.</string>
+    <string name="list">List</string>
+    <string name="profile">Profile</string>
+    <string name="list_title">List</string>
+    <string name="fab_content_desc">Add item</string>
+    <string name="back">Back</string>
+    <string name="logout">Logout</string>
+    <string name="Item">Item</string>
+</resources>
