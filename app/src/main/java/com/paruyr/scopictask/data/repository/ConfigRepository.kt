@@ -2,32 +2,40 @@ package com.paruyr.scopictask.data.repository
 
 import com.paruyr.scopictask.data.config.ConfigStorage
 
-class ConfigRepository(private val configStorage: ConfigStorage) {
+interface ConfigRepository {
+    suspend fun shouldShowWelcome(): Boolean
+    suspend fun setLoggedIn(email: String)
+    suspend fun setLoggedOut()
+    suspend fun getLoggedInUserEmail(): String
+    suspend fun markWelcomeShown()
+    suspend fun isLoggedIn(): Boolean
+}
 
-    suspend fun shouldShowWelcome(): Boolean {
+class ConfigRepositoryImpl(private val configStorage: ConfigStorage) : ConfigRepository {
+
+    override suspend fun shouldShowWelcome(): Boolean {
         return !configStorage.isWelcomeShown()
     }
 
-    suspend fun setLoggedIn(email: String) {
+    override suspend fun setLoggedIn(email: String) {
         configStorage.setLoggedIn(true)
         configStorage.setLoggedInUserEmail(email)
     }
 
-    suspend fun setLoggedOut() {
+    override suspend fun setLoggedOut() {
         configStorage.setLoggedIn(false)
         configStorage.setLoggedInUserEmail("")
     }
 
-    suspend fun getLoggedInUserEmail(): String {
+    override suspend fun getLoggedInUserEmail(): String {
         return configStorage.getLoggedInUserEmail()
     }
 
-
-    suspend fun markWelcomeShown() {
+    override suspend fun markWelcomeShown() {
         configStorage.markWelcomeShown()
     }
 
-    suspend fun isLoggedIn(): Boolean {
+    override suspend fun isLoggedIn(): Boolean {
         return configStorage.isLoggedIn()
     }
 }

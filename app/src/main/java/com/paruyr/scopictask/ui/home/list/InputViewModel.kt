@@ -1,20 +1,19 @@
 package com.paruyr.scopictask.ui.home.list
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.paruyr.scopictask.utils.Constants.ITEM_TEXT_MAX_LENGTH
+import com.paruyr.scopictask.viewmodel.BaseViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
-class InputViewModel : ViewModel() {
+class InputViewModel : BaseViewModel() {
     private val _warningMessage = MutableSharedFlow<String?>()
     val warningMessage: SharedFlow<String?> = _warningMessage
 
     private val _input = MutableSharedFlow<String>()
     val input: SharedFlow<String> = _input
 
-    fun updateCharCount(input: String) = viewModelScope.launch {
+    fun updateCharCount(input: String) = commonViewModelScope.launch {
         if (input.length >= ITEM_TEXT_MAX_LENGTH) {
             _warningMessage.emit("Character limit reached!")
         } else {
@@ -22,7 +21,7 @@ class InputViewModel : ViewModel() {
         }
     }
 
-    fun addItem(userInput: String) = viewModelScope.launch {
+    fun addItem(userInput: String) = commonViewModelScope.launch {
         if (userInput.isBlank()) {
             _warningMessage.emit("Invalid Data!")
         } else {

@@ -6,9 +6,16 @@ import com.paruyr.scopictask.data.model.list.ItemData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class RoomItemDataRepository(private val roomDataSource: RoomDbDataSource) {
+interface RoomItemDataRepository {
+    fun getItems(userName: String): Flow<List<ItemData>>
+    suspend fun insertItem(item: String, userName: String)
+    suspend fun deleteItem(item: ItemData, userName: String)
+}
 
-    fun getItems(userName: String): Flow<List<ItemData>> {
+class RoomItemDataRepositoryImpl(private val roomDataSource: RoomDbDataSource) :
+    RoomItemDataRepository {
+
+    override fun getItems(userName: String): Flow<List<ItemData>> {
         return roomDataSource.getItems(userName).map { userItems ->
             userItems.map {
                 ItemData(
@@ -19,11 +26,11 @@ class RoomItemDataRepository(private val roomDataSource: RoomDbDataSource) {
         }
     }
 
-    suspend fun insertItem(item: String, userName: String) {
+    override suspend fun insertItem(item: String, userName: String) {
         roomDataSource.insertItem(item, userName)
     }
 
-    suspend fun deleteItem(item: ItemData, userName: String) {
+    override suspend fun deleteItem(item: ItemData, userName: String) {
         roomDataSource.deleteItem(
             UserItemEntity(
                 id = item.id.toLong(),

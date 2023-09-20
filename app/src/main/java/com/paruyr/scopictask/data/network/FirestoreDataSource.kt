@@ -8,8 +8,14 @@ import com.paruyr.scopictask.utils.Constants.FIRESTORE_ITEM_NODE
 import com.paruyr.scopictask.utils.Constants.FIRESTORE_USERS_NODE
 import kotlinx.coroutines.tasks.await
 
-class FirestoreDataSource(private var firestore: FirebaseFirestore) {
-    suspend fun getItems(userName: String): MutableMap<String, String> {
+interface FirestoreDataSource {
+    suspend fun getItems(userName: String): MutableMap<String, String>
+    suspend fun insertItem(item: String, userName: String): Result<Unit>
+    suspend fun deleteItem(id: String, userName: String): Result<Unit>
+}
+
+class FirestoreDataSourceImpl(private var firestore: FirebaseFirestore) : FirestoreDataSource {
+    override suspend fun getItems(userName: String): MutableMap<String, String> {
         val userNodeRef = firestore.collection(FIRESTORE_USERS_NODE).document(userName)
         val itemList = mutableMapOf<String, String>()
 
@@ -33,7 +39,7 @@ class FirestoreDataSource(private var firestore: FirebaseFirestore) {
         return itemList
     }
 
-    suspend fun insertItem(item: String, userName: String): Result<Unit> {
+    override suspend fun insertItem(item: String, userName: String): Result<Unit> {
         return try {
             // Add a new document with a generated ID
             // Reference to the user's node
@@ -51,7 +57,7 @@ class FirestoreDataSource(private var firestore: FirebaseFirestore) {
         }
     }
 
-    suspend fun deleteItem(id: String, userName: String): Result<Unit> {
+    override suspend fun deleteItem(id: String, userName: String): Result<Unit> {
         return try {
             // Reference to the user's node
             val userNodeRef = firestore.collection(FIRESTORE_USERS_NODE).document(userName)

@@ -2,8 +2,12 @@ package com.paruyr.scopictask.data.repository
 
 import com.paruyr.scopictask.data.network.AuthenticationDataSource
 
-class SignOutRepository(private val dataSource: AuthenticationDataSource) {
-    fun signOut() {
+interface SignOutRepository {
+    fun signOut()
+}
+
+class SignOutRepositoryImpl(private val dataSource: AuthenticationDataSource) : SignOutRepository {
+    override fun signOut() {
         dataSource.signOut()
     }
 }

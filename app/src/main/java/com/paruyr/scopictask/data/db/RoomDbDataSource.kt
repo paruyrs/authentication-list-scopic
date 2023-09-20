@@ -4,17 +4,23 @@ import com.paruyr.scopictask.data.db.dao.UserItemDao
 import com.paruyr.scopictask.data.db.entity.UserItemEntity
 import kotlinx.coroutines.flow.Flow
 
-class RoomDbDataSource(private val userItemDao: UserItemDao) {
+interface RoomDbDataSource {
+    fun getItems(userName: String): Flow<List<UserItemEntity>>
+    suspend fun insertItem(item: String, userName: String)
+    suspend fun deleteItem(item: UserItemEntity)
+}
 
-    fun getItems(userName: String): Flow<List<UserItemEntity>> {
+class RoomDbDataSourceImpl(private val userItemDao: UserItemDao) : RoomDbDataSource {
+
+    override fun getItems(userName: String): Flow<List<UserItemEntity>> {
         return userItemDao.getItemsByUserName(userName)
     }
 
-    suspend fun insertItem(item: String, userName: String) {
+    override suspend fun insertItem(item: String, userName: String) {
         userItemDao.insertItem(UserItemEntity(item = item, userName = userName))
     }
 
-    suspend fun deleteItem(item: UserItemEntity) {
+    override suspend fun deleteItem(item: UserItemEntity) {
         userItemDao.deleteItem(item)
     }
 }

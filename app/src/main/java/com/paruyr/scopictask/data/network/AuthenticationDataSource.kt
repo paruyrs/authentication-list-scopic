@@ -8,9 +8,16 @@ import kotlinx.coroutines.tasks.await
 /**
  * Class that handles authentication sign out and sign in credentials and retrieves user information.
  */
-class AuthenticationDataSource(private var auth: FirebaseAuth) {
 
-    suspend fun signIn(email: String, password: String): Result<AuthResult> {
+interface AuthenticationDataSource {
+    suspend fun signIn(email: String, password: String): Result<AuthResult>
+    suspend fun signUp(email: String, password: String): Result<AuthResult>
+    fun signOut()
+}
+
+class AuthenticationDataSourceImpl(private var auth: FirebaseAuth) : AuthenticationDataSource {
+
+    override suspend fun signIn(email: String, password: String): Result<AuthResult> {
         return try {
             val authResult = auth.signInWithEmailAndPassword(email, password).await()
             Result.Success(authResult)
@@ -19,7 +26,7 @@ class AuthenticationDataSource(private var auth: FirebaseAuth) {
         }
     }
 
-    suspend fun signUp(email: String, password: String): Result<AuthResult> {
+    override suspend fun signUp(email: String, password: String): Result<AuthResult> {
         return try {
             val authResult = auth.createUserWithEmailAndPassword(email, password).await()
             Result.Success(authResult)
@@ -28,7 +35,7 @@ class AuthenticationDataSource(private var auth: FirebaseAuth) {
         }
     }
 
-    fun signOut() {
+    override fun signOut() {
         auth.signOut()
     }
 }

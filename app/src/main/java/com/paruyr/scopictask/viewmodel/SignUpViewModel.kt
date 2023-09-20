@@ -1,7 +1,6 @@
 package com.paruyr.scopictask.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paruyr.scopictask.R
 import com.paruyr.scopictask.data.Result
@@ -18,7 +17,7 @@ class SignUpViewModel(
     private val signUpRepository: SignUpRepository,
     private val validation: Validation,
     private val configRepository: ConfigRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _navigation = MutableSharedFlow<Navigation>()
     val navigation: SharedFlow<Navigation> = _navigation
@@ -28,14 +27,11 @@ class SignUpViewModel(
     val signUpFormState: SharedFlow<SignUpFormState> = _signUpForm
     private val _invalidData = MutableSharedFlow<Unit>()
     val invalidData: SharedFlow<Unit> = _invalidData
-    fun setup() {
-        // Send analytics event that user opened the login screen
-    }
 
     fun signUpClick(
         email: String,
         password: String,
-    ) = viewModelScope.launch {
+    ) = commonViewModelScope.launch {
         when (val result = signUpRepository.signUp(email, password)) {
             is Result.Success -> {
                 configRepository.setLoggedIn(result.data)
@@ -57,7 +53,7 @@ class SignUpViewModel(
         }
     }
 
-    fun signInClick(email: String) = viewModelScope.launch {
+    fun signInClick(email: String) = commonViewModelScope.launch {
         _navigation.emit(Navigation.SignIn(email))
     }
 
@@ -74,12 +70,12 @@ class SignUpViewModel(
             _signUpForm.emit(SignUpFormState(usernameError, passwordError, field, isDataValid))
         }
 
-    fun passwordDataChanged(newPassword: String) = viewModelScope.launch {
+    fun passwordDataChanged(newPassword: String) = commonViewModelScope.launch {
         if (!validation.isPasswordValid(newPassword))
             _invalidData.emit(Unit)
     }
 
-    fun emailDataChanged(newEmail: String) = viewModelScope.launch {
+    fun emailDataChanged(newEmail: String) = commonViewModelScope.launch {
         if (!validation.isEmailValid(newEmail))
             _invalidData.emit(Unit)
     }

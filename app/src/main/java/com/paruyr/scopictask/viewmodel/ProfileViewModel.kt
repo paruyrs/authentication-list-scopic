@@ -1,7 +1,5 @@
 package com.paruyr.scopictask.viewmodel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.paruyr.scopictask.data.repository.ConfigRepository
 import com.paruyr.scopictask.data.repository.SignOutRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -13,7 +11,7 @@ import kotlinx.coroutines.launch
 class ProfileViewModel(
     private val signOutRepository: SignOutRepository,
     private val configRepository: ConfigRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _navigation = MutableSharedFlow<Navigation>()
     val navigation: SharedFlow<Navigation> = _navigation
@@ -21,15 +19,15 @@ class ProfileViewModel(
     private val _welcomeUser = MutableStateFlow<String?>(null)
     val welcomeUser: StateFlow<String?> = _welcomeUser
 
-    fun setup() = viewModelScope.launch {
+    fun setup() = commonViewModelScope.launch {
         _welcomeUser.emit(configRepository.getLoggedInUserEmail())
     }
 
-    fun navigateBackToList() = viewModelScope.launch {
+    fun navigateBackToList() = commonViewModelScope.launch {
         _navigation.emit(Navigation.List)
     }
 
-    fun logoutClicked() = viewModelScope.launch {
+    fun logoutClicked() = commonViewModelScope.launch {
         signOutRepository.signOut()
         configRepository.setLoggedOut()
         _navigation.emit(Navigation.Landing)

@@ -2,7 +2,6 @@ package com.paruyr.scopictask.viewmodel
 
 import android.util.Log
 import androidx.constraintlayout.widget.ConstraintLayoutStates.TAG
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paruyr.scopictask.data.model.list.ItemData
 import com.paruyr.scopictask.data.network.Result
@@ -23,7 +22,7 @@ class ListViewModel(
     private val roomItemDataRepository: RoomItemDataRepository,
     private val firestoreItemDataRepository: FirestoreItemDataRepository,
     private val configRepository: ConfigRepository
-) : ViewModel() {
+) : BaseViewModel() {
     private val _navigation = MutableSharedFlow<Navigation>()
     val navigation: SharedFlow<Navigation> = _navigation
 
@@ -42,20 +41,20 @@ class ListViewModel(
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
-    fun setup() = viewModelScope.launch {
+    fun setup() = commonViewModelScope.launch {
         getUserItemsFromDb()
         getUserItemsFromFirestore()
     }
 
-    fun navigateToProfile() = viewModelScope.launch {
+    fun navigateToProfile() = commonViewModelScope.launch {
         _navigation.emit(Navigation.Profile)
     }
 
-    fun addItem() = viewModelScope.launch {
+    fun addItem() = commonViewModelScope.launch {
         _navigation.emit(Navigation.AddListItem)
     }
 
-    fun removeItem(removedItem: ItemData) = viewModelScope.launch {
+    fun removeItem(removedItem: ItemData) = commonViewModelScope.launch {
 
         if (firestoreSwitchState.value)
             deleteUserItemFromFirestore(removedItem)
@@ -63,7 +62,7 @@ class ListViewModel(
             deleteUserItemFromDb(removedItem)
     }
 
-    fun switchFirestoreState(state: Boolean) = viewModelScope.launch {
+    fun switchFirestoreState(state: Boolean) = commonViewModelScope.launch {
         firestoreSwitchState.value = state
         if (state) {
             getUserItemsFromFirestore()
@@ -80,23 +79,23 @@ class ListViewModel(
         }
     }
 
-    private fun insertUserItemToDb(userItem: String) = viewModelScope.launch {
+    private fun insertUserItemToDb(userItem: String) = commonViewModelScope.launch {
         roomItemDataRepository.insertItem(
             item = userItem,
             userName = configRepository.getLoggedInUserEmail()
         )
     }
 
-    private fun getUserItemsFromDb() = viewModelScope.launch {
+    private fun getUserItemsFromDb() = commonViewModelScope.launch {
         localItemsFlow =
             roomItemDataRepository.getItems(configRepository.getLoggedInUserEmail())
     }
 
-    private fun deleteUserItemFromDb(userItem: ItemData) = viewModelScope.launch {
+    private fun deleteUserItemFromDb(userItem: ItemData) = commonViewModelScope.launch {
         roomItemDataRepository.deleteItem(userItem, configRepository.getLoggedInUserEmail())
     }
 
-    private fun insertUserItemToFirestore(userItem: String) = viewModelScope.launch {
+    private fun insertUserItemToFirestore(userItem: String) = commonViewModelScope.launch {
         when (val result = firestoreItemDataRepository.insertItem(
             item = userItem,
             userName = configRepository.getLoggedInUserEmail()
@@ -118,11 +117,11 @@ class ListViewModel(
         }
     }
 
-    private fun getUserItemsFromFirestore() = viewModelScope.launch {
+    private fun getUserItemsFromFirestore() = commonViewModelScope.launch {
         firestoreItemsFlow.emit(firestoreItemDataRepository.loadItems(configRepository.getLoggedInUserEmail()))
     }
 
-    private fun deleteUserItemFromFirestore(userItem: ItemData) = viewModelScope.launch {
+    private fun deleteUserItemFromFirestore(userItem: ItemData) = commonViewModelScope.launch {
         when (val result = firestoreItemDataRepository.deleteItem(
             userItem,
             configRepository.getLoggedInUserEmail()

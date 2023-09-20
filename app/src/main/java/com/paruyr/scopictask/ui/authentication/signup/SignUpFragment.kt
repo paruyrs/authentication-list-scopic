@@ -38,7 +38,6 @@ class SignUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        signUpViewModel.setup()
 
         with(binding) {
             args.email?.let {

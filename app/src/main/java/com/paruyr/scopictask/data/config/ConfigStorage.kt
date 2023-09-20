@@ -7,9 +7,19 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.firstOrNull
 
-class ConfigStorage(
+interface ConfigStorage {
+    suspend fun setLoggedIn(loggedIn: Boolean)
+    suspend fun isLoggedIn(): Boolean
+    suspend fun markWelcomeShown()
+    suspend fun isWelcomeShown(): Boolean
+    suspend fun setLoggedInUserEmail(userEmail: String)
+    suspend fun getLoggedInUserEmail(): String
+
+}
+
+class ConfigStorageImpl(
     private val dataStore: DataStore<Preferences>
-) {
+) : ConfigStorage {
 
     companion object {
         private val IS_LOGGED_IN_KEY = booleanPreferencesKey("logged_in")
@@ -27,27 +37,27 @@ class ConfigStorage(
         }
     }
 
-    suspend fun setLoggedIn(loggedIn: Boolean) {
+    override suspend fun setLoggedIn(loggedIn: Boolean) {
         setValueByKey(IS_LOGGED_IN_KEY, loggedIn)
     }
 
-    suspend fun isLoggedIn(): Boolean {
+    override suspend fun isLoggedIn(): Boolean {
         return getValueByKey(IS_LOGGED_IN_KEY) ?: false
     }
 
-    suspend fun markWelcomeShown() {
+    override suspend fun markWelcomeShown() {
         setValueByKey(WELCOME_SHOWN_KEY, true)
     }
 
-    suspend fun isWelcomeShown(): Boolean {
+    override suspend fun isWelcomeShown(): Boolean {
         return getValueByKey(WELCOME_SHOWN_KEY) ?: false
     }
 
-    suspend fun setLoggedInUserEmail(userEmail: String) {
+    override suspend fun setLoggedInUserEmail(userEmail: String) {
         setValueByKey(USER_EMAIL_KEY, userEmail)
     }
 
-    suspend fun getLoggedInUserEmail(): String {
+    override suspend fun getLoggedInUserEmail(): String {
         return getValueByKey(USER_EMAIL_KEY) ?: ""
     }
 }

@@ -10,8 +10,12 @@ import com.paruyr.scopictask.data.network.AuthenticationDataSource
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class SignInRepository(private val dataSource: AuthenticationDataSource) {
-    suspend fun signIn(email: String, password: String): Result<String> {
+interface SignInRepository {
+    suspend fun signIn(email: String, password: String): Result<String>
+}
+
+class SignInRepositoryImpl(private val dataSource: AuthenticationDataSource) : SignInRepository {
+    override suspend fun signIn(email: String, password: String): Result<String> {
         return when (val signInAuthResult = dataSource.signIn(email, password)) {
             is Result.Success -> {
                 // Sign in success.
